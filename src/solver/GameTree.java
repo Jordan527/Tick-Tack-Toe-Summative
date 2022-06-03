@@ -33,7 +33,7 @@ public abstract class GameTree<P extends Comparable<P>, A extends Comparable<A>,
      * root (or the initial state)
      */
     protected GameTree(S root) {
-	// <TODO>
+	
 	throw new UnsupportedOperationException("To be implemented.");
     }
 

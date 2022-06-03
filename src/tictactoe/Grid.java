@@ -25,8 +25,120 @@ public class Grid extends State<Mark, Coordinate> {
      */
     @Override
     public final void doAction(Coordinate coord) {
-	// <TODO>
-	throw new UnsupportedOperationException("To be implemented");
+		Coordinate[] set = getAction(); //gets a list of unmarked spots
+		boolean available = false;
+		
+		for(int i = 0; i < set.length; i ++)
+		{
+			if(set[i].equals(coord))
+			{
+				available = true; //checks if the coordinate exists within the unmarked spots
+			}
+		}
+		
+		if(available)
+		{
+			grid[coord.row][coord.column] = player; 
+			System.out.println(toString());
+			
+			if (isWinner(player))
+			{
+				status = player;
+				System.out.println("Winner: " + player);
+			}
+			
+			if(getPlayer() == Mark.Cross)
+			{
+				xCount ++;
+				player = Mark.Nought;
+			}
+			else if(getPlayer() == Mark.Nought)
+			{
+				oCount ++;
+				player = Mark.Cross;
+			}
+		}
+		else
+		{
+			status = null;
+		}
+		
+		int unmarked = countUnmarkedCells();
+		if (unmarked == 0)
+		{
+			status = null;
+			System.out.println("No Winner");
+		}
+		
+    }
+    
+    
+    
+    public final boolean isWinner(Mark m)
+    {
+    	int hCount = 0;
+    	int vCount = 0;
+    	boolean winner = false;
+    	
+    	for(int i = 0; i < grid.length; i ++)
+    	{
+    		for(int j = 0; j < grid.length; j ++)
+    		{
+    			if(grid[i][j] == m)
+    			{
+    				hCount ++;
+    			}
+    			if(grid[j][i] == m)
+    			{
+    				vCount ++;
+    			}
+    		}
+    		if(hCount == grid.length || vCount == grid.length)
+    		{
+    			winner = true;
+    		}
+    		hCount = 0;
+    		vCount = 0;
+    	}
+    	
+    	int count = 0;
+    	
+    	for(int i = 0; i < grid.length; i ++)
+    	{
+    		if(grid[i][i] == m)
+    		{
+    			count ++;
+    		}
+    	}
+    	
+    	
+    	if(count == grid.length)
+    	{
+    		winner = true;
+    	}
+    	
+    	
+    	
+    	count = 0;
+    	
+    	int index = 0;
+    	
+    	for(int i = grid.length-1; i > 0; i --)
+    	{
+    		if(grid[index][i] == m)
+    		{
+    			count ++;
+    		}
+    		index ++;
+    	}
+    	
+    	
+    	if(count == grid.length)
+    	{
+    		winner = true;
+    	}
+    	
+    	return winner;
     }
 
     /**
