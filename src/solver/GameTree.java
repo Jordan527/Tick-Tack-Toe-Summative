@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,11 +33,57 @@ public abstract class GameTree<P extends Comparable<P>, A extends Comparable<A>,
      * Construct a game tree and populate the tree with the specified state as the
      * root (or the initial state)
      */
-    protected GameTree(S root) {
-	
-	throw new UnsupportedOperationException("To be implemented.");
+    protected GameTree(S root) 
+    {
+    	ArrayList<S> initStateList = new ArrayList<>();
+    	ArrayList<S> stateList = generateStateList(initStateList, root);
+    	
+    	states = getNewStateArray(stateList.size());
+    	actions = getNewActionArray(stateList.size());
+    	
+    	for(int i = 0; i < stateList.size(); i ++)
+    	{
+    		S state = stateList.get(i);
+    		
+    		A[] permissable = getActions(state);    		
+    		states[i] = state;
+    		
+    		for(int j = 0; j < permissable.length; j ++)
+    		{
+    			actions[i][j] = permissable[j];
+    		}
+    	}
+    	this.destinations = null;
+		this.root = 0;
+
     }
 
+    public ArrayList<S> generateStateList(ArrayList<S> stateList, S state)
+    {
+    	stateList.add(state);
+    	states = getNewStateArray(stateList.size());
+    	for(int i = 0; i < stateList.size(); i ++)
+    	{
+    		states[i] = stateList.get(i);
+    	}
+    	
+    	A[] permissable = getActions(state);
+    	if(permissable == null)
+    	{
+    		return stateList;
+    	}
+    	else 
+    	{
+    		for(int i = 0; i < permissable.length; i++)
+	    	{
+	    		S nextState = getDestinationState(state, permissable[i]);
+	    		stateList = generateStateList(stateList, nextState);
+	    	}
+    		return stateList;
+    	}
+    }
+    
+    
     /**
      * Name of folder that store result text files of state transitions
      */
@@ -46,7 +93,7 @@ public abstract class GameTree<P extends Comparable<P>, A extends Comparable<A>,
      * all nodes (states) in this game tree. Note that this array must be naturally
      * sorted via method compareTo() itself.
      */
-    protected final S[] states;
+    protected S[] states;
 
     /**
      * all actions for each state; i.e. actions[i][j] is the j-th action of the i-th

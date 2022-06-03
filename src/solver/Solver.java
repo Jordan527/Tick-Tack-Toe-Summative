@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import tictactoe.Mark;
+
 /**
  * An implementation of game-solving algorithm to solve turn-based game.
  * 
@@ -26,9 +28,45 @@ public abstract class Solver<P extends Comparable<P>, A extends Comparable<A>, S
      * @return a positive value if it's a win for the player; a negative value if
      *         it's a loss; zero if it's a tie
      */
-    public float solve() {
-	// <TODO>
-	throw new UnsupportedOperationException("To be implemented.");
+    public float solve() 
+    {    	
+    	int maxPlayerVal = 0;
+    	int minPlayerVal = 0;
+    	int tieVal = 0;
+    	
+    	P maxPlayerMark = tree.states[0].getPlayer();
+    	P minPlayerMark = getOpponent(maxPlayerMark);
+    	
+    	for(int i = 0; i < tree.actions.length; i ++)
+    	{
+    		if(tree.actions[i] == null)
+    		{
+    			if(tree.states[i].getPlayer() == maxPlayerMark)
+    			{
+    				maxPlayerVal ++;
+    			}
+    			else if (tree.states[i].getPlayer() == minPlayerMark)
+    			{
+    				minPlayerVal ++;
+    			}
+    			else
+    			{
+    				tieVal ++;
+    			}
+    		}
+    	}
+    	if(maxPlayerVal > minPlayerVal && maxPlayerVal > tieVal)
+    	{
+    		return 1;
+    	}
+    	else if(minPlayerVal > maxPlayerVal && minPlayerVal > tieVal)
+    	{
+    		return 2;
+    	}
+    	else
+    	{
+    		return 0;
+    	}
     }
 
     /**
