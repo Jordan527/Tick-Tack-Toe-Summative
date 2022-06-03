@@ -43,11 +43,11 @@ public abstract class Solver<P extends Comparable<P>, A extends Comparable<A>, S
     		{
     			if(tree.states[i].getPlayer() == maxPlayerMark)
     			{
-    				maxPlayerVal ++;
+    				minPlayerVal ++;
     			}
     			else if (tree.states[i].getPlayer() == minPlayerMark)
     			{
-    				minPlayerVal ++;
+    				maxPlayerVal ++;
     			}
     			else
     			{
@@ -61,7 +61,7 @@ public abstract class Solver<P extends Comparable<P>, A extends Comparable<A>, S
     	}
     	else if(minPlayerVal > maxPlayerVal && minPlayerVal > tieVal)
     	{
-    		return 2;
+    		return -1;
     	}
     	else
     	{

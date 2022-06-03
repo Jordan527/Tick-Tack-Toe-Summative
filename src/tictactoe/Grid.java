@@ -60,11 +60,11 @@ public class Grid extends State<Mark, Coordinate> {
 		}
 		else
 		{
-			status = null;
+			System.out.println("This coordinate is not available");
 		}
 		
 		int unmarked = countUnmarkedCells();
-		if (unmarked == 0)
+		if (unmarked == 0 && status == Mark.Unmarked)
 		{
 			status = null;
 			System.out.println("No Winner");
